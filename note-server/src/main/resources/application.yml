@@ -1,0 +1,18 @@
+
+server:
+  port: 9000
+spring:
+  servlet:
+    context-path: /api
+  datasource:
+    username: ${DB_USER}
+    url: jdbc:mysql://localhost:${DB_PORT}/${DB_NAME}
+    password: ${DB_PASSWORD}
+    driver-class: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
