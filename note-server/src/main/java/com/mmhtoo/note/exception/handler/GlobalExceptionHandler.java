@@ -15,7 +15,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({ NoHandlerFoundException.class })
-    public ResponseEntity<AppResponse> notFoundException(NoHandlerFoundException e ){
+    public ResponseEntity<AppResponse> notFoundException(Exception e ){
         Map<String,String> error = new HashMap<>();
         error.put("error",e.getMessage());
         return ResponseUtil.errorResponse(

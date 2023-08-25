@@ -1,9 +1,9 @@
 
 server:
   port: 9000
-spring:
   servlet:
     context-path: /api
+spring:
   datasource:
     username: ${DB_USER}
     url: jdbc:mysql://localhost:${DB_PORT}/${DB_NAME}
