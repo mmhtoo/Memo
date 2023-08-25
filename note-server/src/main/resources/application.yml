@@ -1,9 +1,9 @@
 
 server:
   port: 9000
-spring:
   servlet:
     context-path: /api
+spring:
   datasource:
     username: ${DB_USER}
     url: jdbc:mysql://localhost:${DB_PORT}/${DB_NAME}
@@ -12,7 +12,9 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+  mvc:
+    throw-exception-if-no-handler-found: true
