@@ -1,5 +1,7 @@
 package com.mmhtoo.note.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,13 +14,15 @@ import java.time.LocalDateTime;
 @Entity
 @Table( name = "accounts" )
 @Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Account {
 
     @Id
     private String id;
 
-    @Column( name = "username" , nullable = false , unique = true , length = 20 )
+    @Column( name = "username" , nullable = false , length = 20 )
     private String username;
 
     @Column( name = "email" , unique = true , nullable = false , length = 50 )
@@ -39,7 +43,7 @@ public class Account {
     @Column( name = "joined_date" , nullable = false)
     private LocalDateTime joinedDate;
 
-    @Column( name = "updated_date" , nullable = false )
+    @Column( name = "updated_date")
     private LocalDateTime updatedDate;
 
 }

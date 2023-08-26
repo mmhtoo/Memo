@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.*;
 
 @Data
-public class AccountRegisterReqDTO {
+public class RegisterReqDTO {
 
     @NotNull( message = "Username is required!")
     @NotEmpty( message = "Username is required!")
