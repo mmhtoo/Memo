@@ -1,6 +1,7 @@
 package com.mmhtoo.note.controller;
 
 import com.mmhtoo.note.annotation.CheckBinding;
+import com.mmhtoo.note.dto.request.LoginReqDTO;
 import com.mmhtoo.note.dto.request.RegisterReqDTO;
 import com.mmhtoo.note.dto.response.AppResponse;
 import com.mmhtoo.note.entity.Account;
@@ -36,6 +37,25 @@ public class AccountController extends BaseController {
                 "Successfully registered account, Please verify your account in your email!",
                 AccountMapper.accountToAccountResDto(savedAccount)
         );
+
+    }
+
+    @CheckBinding
+    @PostMapping( value = "${api.accounts.login}" )
+    public ResponseEntity<AppResponse> signinAccount(
+            @Valid @RequestBody LoginReqDTO loginReqDTO ,
+            BindingResult bindingResult
+    ) {
+
+        Account account = this.accountService.authenticate(loginReqDTO);
+
+        // TODO : add Token in Response Header
+
+        return ResponseUtil.dataResponse(
+                HttpStatus.OK ,
+                "Successfully login!",
+                AccountMapper.accountToAccountResDto(account)
+        ) ;
 
     }
 
