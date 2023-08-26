@@ -40,7 +40,7 @@ public interface IAccountService {
      * @return : Account | null
      * @description : will return Account entity if there is valid user, otherwise will throw UsernameNotFoundException
      */
-    Authentication authenticate(LoginReqDTO loginReqDTO);
+    Account authenticate(LoginReqDTO loginReqDTO);
 
     /*
      * for creating new account

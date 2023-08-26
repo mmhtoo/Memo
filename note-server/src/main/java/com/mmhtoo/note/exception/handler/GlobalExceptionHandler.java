@@ -7,6 +7,9 @@ import com.mmhtoo.note.exception.custom.NeedVerificationException;
 import com.mmhtoo.note.util.ResponseUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -48,6 +51,29 @@ public class GlobalExceptionHandler {
         error.put("error",e.getMessage());
         return ResponseUtil.errorResponse(
                 HttpStatus.NOT_ACCEPTABLE ,
+                e.getMessage() ,
+                error
+        );
+    }
+
+    // for requests without req body
+    @ExceptionHandler({ HttpMessageNotReadableException.class })
+    public ResponseEntity<AppResponse> httpMessageNotReadableException(Exception e ){
+        Map<String,String> error = new HashMap<>();
+        error.put("error","Request body is missing!");
+        return ResponseUtil.errorResponse(
+                HttpStatus.BAD_REQUEST ,
+                "Request body is missing!" ,
+                error
+        );
+    }
+
+    @ExceptionHandler({ UsernameNotFoundException.class , BadCredentialsException.class })
+    public ResponseEntity<AppResponse> userNotFoundAndBadCredentialException(Exception e ){
+        Map<String,String> error = new HashMap<>();
+        error.put("error",e.getMessage());
+        return ResponseUtil.errorResponse(
+                HttpStatus.BAD_REQUEST ,
                 e.getMessage() ,
                 error
         );

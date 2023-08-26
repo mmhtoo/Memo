@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -51,13 +52,18 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public Authentication authenticate(LoginReqDTO loginReqDTO) {
-        return this.authenticationManager.authenticate(
+    public Account authenticate(LoginReqDTO loginReqDTO) {
+        Authentication authentication = this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginReqDTO.getEmail() ,
                         loginReqDTO.getPassword()
                 )
         );
+
+        SecurityContextHolder.getContext()
+                .setAuthentication(authentication);
+
+        return this.getAccountByEmail(loginReqDTO.getEmail());
     }
 
     @Override
