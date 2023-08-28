@@ -8,6 +8,8 @@ import com.mmhtoo.note.exception.custom.InvalidDataAccessException;
 import com.mmhtoo.note.exception.custom.NeedVerificationException;
 import org.springframework.security.core.Authentication;
 
+import java.util.Map;
+
 public interface IAccountService {
 
     /*
@@ -51,5 +53,13 @@ public interface IAccountService {
      *  after running this method will call to sendEmail Method
      */
     Account createNewAccount(RegisterReqDTO registerReqDTO) throws DuplicateEntityException, NeedVerificationException;
+
+    /*
+     * for getting payload object from account entity to use as payload in token
+     * @params{ account : Account }
+     * @return : Map<String,String>
+     * @description : Will return key value map object payload
+     */
+    Map<String,String> getTokenPayload(Account account);
 
 }

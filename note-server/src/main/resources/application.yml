@@ -18,3 +18,6 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
   mvc:
     throw-exception-if-no-handler-found: true
+jwt:
+  issuer: MMHTOO@DEV
+  age: 30

@@ -9,20 +9,27 @@ import com.mmhtoo.note.exception.custom.DuplicateEntityException;
 import com.mmhtoo.note.exception.custom.NeedVerificationException;
 import com.mmhtoo.note.mapper.AccountMapper;
 import com.mmhtoo.note.service.IAccountService;
+import com.mmhtoo.note.service.ITokenService;
 import com.mmhtoo.note.util.ResponseUtil;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 @RestController
+@RequestMapping( value = "${api.accounts.root}")
 @AllArgsConstructor
 public class AccountController extends BaseController {
 
     private final IAccountService accountService;
+    private final ITokenService tokenService;
 
     @CheckBinding
     @PostMapping( value = "${api.accounts.register}" )
@@ -45,18 +52,25 @@ public class AccountController extends BaseController {
     public ResponseEntity<AppResponse> signinAccount(
             @Valid @RequestBody LoginReqDTO loginReqDTO ,
             BindingResult bindingResult
-    ) {
+    ) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 
         Account account = this.accountService.authenticate(loginReqDTO);
 
         // TODO : add Token in Response Header
+        String token = this.tokenService.generate(
+                this.accountService.getTokenPayload(account)
+        );
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set(HttpHeaders.AUTHORIZATION,token);
 
         return ResponseUtil.dataResponse(
                 HttpStatus.OK ,
                 "Successfully login!",
-                AccountMapper.accountToAccountResDto(account)
+                AccountMapper.accountToAccountResDto(account) ,
+                httpHeaders
         ) ;
-
     }
+
 
 }

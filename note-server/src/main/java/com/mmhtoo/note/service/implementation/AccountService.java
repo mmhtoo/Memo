@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -90,6 +92,15 @@ public class AccountService implements IAccountService {
         // TODO : send verification email
 
         return this.accountRepo.save(account);
+    }
+
+    @Override
+    public Map<String, String> getTokenPayload(Account account) {
+        Map<String,String> payload = new HashMap<>();
+        payload.put("userId",account.getId());
+        payload.put("email",account.getEmail());
+        payload.put("username",account.getUsername());
+        return payload;
     }
 
 }

@@ -3,6 +3,7 @@ package com.mmhtoo.note.util;
 import com.mmhtoo.note.dto.response.AppResponse;
 import com.mmhtoo.note.dto.response.DataResponse;
 import com.mmhtoo.note.dto.response.ErrorResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -43,5 +44,26 @@ public final class ResponseUtil {
         return ResponseEntity.status(status)
                 .body(response);
     }
+
+    public static ResponseEntity<AppResponse> dataResponse(
+            HttpStatus status ,
+            String description ,
+            Object data ,
+            HttpHeaders httpHeaders
+    ){
+        DataResponse<Object> response = new DataResponse<>();
+        response.setData(data);
+        response.setDescription(description);
+        response.setStatus(status);
+        response.setStatusCode(status.value());
+        response.setTimestamp(LocalDateTime.now());
+
+        return new ResponseEntity<>(
+                response ,
+                httpHeaders ,
+                status
+        );
+    }
+
 
 }
