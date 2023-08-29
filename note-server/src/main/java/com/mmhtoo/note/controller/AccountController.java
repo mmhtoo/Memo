@@ -91,4 +91,22 @@ public class AccountController extends BaseController {
         );
     }
 
+    @GetMapping( value = "${api.accounts.accountInfo}")
+    public ResponseEntity<AppResponse> getAccountInfo(
+            @PathVariable( value = "accountId" ) String accountId
+    ) throws InvalidDataAccessException {
+        Account account = this.accountService.getAccountByAccountId(accountId);
+
+        if( !account.isEnabled() )
+            throw new InvalidDataAccessException("Invalid request for accessing account!");
+
+        return ResponseUtil.dataResponse(
+                HttpStatus.OK ,
+                "Success!",
+                AccountMapper.accountToAccountResDto(
+                        this.accountService.getAccountByAccountId(accountId)
+                )
+        );
+    }
+
 }
