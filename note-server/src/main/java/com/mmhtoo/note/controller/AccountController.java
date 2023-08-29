@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -33,10 +35,11 @@ public class AccountController extends BaseController {
 
     @CheckBinding
     @PostMapping( value = "${api.accounts.register}" )
+    @Transactional
     public ResponseEntity<AppResponse> signupAccount(
             @Valid @RequestBody RegisterReqDTO accountReqDTO ,
             BindingResult bindingResult
-    ) throws DuplicateEntityException, NeedVerificationException {
+    ) throws DuplicateEntityException, NeedVerificationException, MessagingException, IOException {
 
         Account savedAccount = this.accountService.createNewAccount(accountReqDTO);
         return ResponseUtil.dataResponse(
@@ -72,5 +75,14 @@ public class AccountController extends BaseController {
         ) ;
     }
 
+    @GetMapping
+    @Transactional
+    public ResponseEntity<AppResponse> verifyAccount(
+            @RequestParam( value = "email" ) String email ,
+            @RequestParam( value = "code" ) String code
+    ){
+        this.accountService.verifyAccount(email,code);
+        return null;
+    }
 
 }

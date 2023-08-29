@@ -9,6 +9,7 @@ import com.mmhtoo.note.exception.custom.NeedVerificationException;
 import com.mmhtoo.note.mapper.AccountMapper;
 import com.mmhtoo.note.repository.AccountRepo;
 import com.mmhtoo.note.service.IAccountService;
+import com.mmhtoo.note.service.IOTPService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +18,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +33,7 @@ public class AccountService implements IAccountService {
     private final AccountRepo accountRepo;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final IOTPService otpService;
 
     @Override
     public boolean isDuplicateEmail(String email) {
@@ -69,9 +72,8 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    @Transactional
     public Account createNewAccount(RegisterReqDTO registerReqDTO)
-            throws DuplicateEntityException, NeedVerificationException {
+            throws DuplicateEntityException, NeedVerificationException, MessagingException, IOException {
         Account savedAccount = this.getAccountByEmail(registerReqDTO.getEmail());
 
         // checking this email is already used by other verified account
@@ -89,9 +91,14 @@ public class AccountService implements IAccountService {
         account.setIsLocked(false);
         account.setJoinedDate(LocalDateTime.now());
 
-        // TODO : send verification email
+        savedAccount = this.accountRepo.save(account);
 
-        return this.accountRepo.save(account);
+        this.otpService.send(
+                savedAccount.getEmail() ,
+                this.otpService.generateOTP()
+        );
+
+        return savedAccount;
     }
 
     @Override
@@ -101,6 +108,11 @@ public class AccountService implements IAccountService {
         payload.put("email",account.getEmail());
         payload.put("username",account.getUsername());
         return payload;
+    }
+
+    @Override
+    public Account verifyAccount(String email, String otp) {
+        return null;
     }
 
 }
