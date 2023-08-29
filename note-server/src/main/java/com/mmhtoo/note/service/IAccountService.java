@@ -6,6 +6,7 @@ import com.mmhtoo.note.entity.Account;
 import com.mmhtoo.note.exception.custom.DuplicateEntityException;
 import com.mmhtoo.note.exception.custom.InvalidDataAccessException;
 import com.mmhtoo.note.exception.custom.NeedVerificationException;
+import com.mmhtoo.note.exception.custom.RepeatedVerificationException;
 import org.springframework.security.core.Authentication;
 
 import javax.mail.MessagingException;
@@ -71,6 +72,6 @@ public interface IAccountService {
      * @description : will make enable in account true
      * if otp is true for that account and that otp is valid
      */
-    Account verifyAccount(String email,String otp);
+    Account verifyAccount(String email,int otp) throws InvalidDataAccessException, RepeatedVerificationException;
 
 }

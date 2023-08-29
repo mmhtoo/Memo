@@ -3,7 +3,6 @@ package com.mmhtoo.note.service.implementation;
 import com.mmhtoo.note.entity.Account;
 import com.mmhtoo.note.entity.OTP;
 import com.mmhtoo.note.repository.OTPRepo;
-import com.mmhtoo.note.service.IAccountService;
 import com.mmhtoo.note.service.IEmailService;
 import com.mmhtoo.note.service.IOTPService;
 import lombok.AllArgsConstructor;
@@ -22,7 +21,6 @@ public class OTPService implements IOTPService {
 
     private final IEmailService emailService;
     private final OTPRepo otpRepo;
-    private final IAccountService accountService;
 
     @Override
     public int generateOTP() {
@@ -36,20 +34,20 @@ public class OTPService implements IOTPService {
     }
 
     @Override
-    public void send(String sendTo, int otp) throws IOException, MessagingException {
-        Account savedAccount = this.accountService.getAccountByEmail(sendTo);
-        OTP savedOTP = this.saveOTP(this.generateOTP(),savedAccount);
+    public void send(Account sendTo, int otp) throws IOException, MessagingException {
+        OTP savedOTP = this.saveOTP(this.generateOTP(),sendTo);
 
         ClassLoader loader = getClass().getClassLoader();
         File file = new File(Objects.requireNonNull(loader.getResource("mail-template.txt")).getFile());
+
         String content = Files.readString(file.toPath())
-                .replace("{{NAME}}",savedAccount.getUsername())
+                .replace("{{NAME}}",sendTo.getUsername())
                 .replace("{{OTP}}",String.valueOf(otp))
-                .replace("{{LINK}}","http://localhost:9000/api/accounts/verify" + "?email="+savedAccount.getEmail()+"&code="+savedOTP.getOtp())
+                .replace("{{LINK}}","http://localhost:9000/api/accounts/verify" + "?email="+sendTo.getEmail()+"&code="+savedOTP.getOtp())
                 .replace("{{REMARK}}","The link and OTP included in this email will expire after next 5 minutes!");
 
         this.emailService.sendEmail(
-                sendTo ,
+                sendTo.getEmail() ,
                 "Sending verification for account registration!",
                 content
         );
@@ -65,6 +63,27 @@ public class OTPService implements IOTPService {
                 .expiredDate(LocalDateTime.now().plusMinutes(5))
                 .build();
         return this.otpRepo.save(otpObj);
+    }
+
+    @Override
+    public OTP getOTPByAccountIdAndOTP(String accountId, int otp) {
+        return this.otpRepo.findByAccountIdAndOtp(accountId,otp)
+                .orElse(null);
+    }
+
+    @Override
+    public boolean validateOTP(String accountId, int otp) {
+        OTP savedOtp = this.getOTPByAccountIdAndOTP(accountId,otp);
+
+        if( savedOtp == null || savedOtp.getExpiredDate().isBefore(LocalDateTime.now()))
+            return false;
+
+        savedOtp.setHasVerified(true);
+        savedOtp.setUpdatedDate(LocalDateTime.now());
+
+        this.otpRepo.save(savedOtp);
+
+        return true;
     }
 
 }

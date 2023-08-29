@@ -25,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if(savedAccount.isEmpty())
             throw new UsernameNotFoundException("Bad Credentials!");
 
-        if(!savedAccount.get().getIsEnabled())
+        if(!savedAccount.get().isEnabled())
             throw new BadCredentialsException("You need to verify your account with this email or you need to request to re-send verification email!");
 
         return new UserPrincipal(savedAccount.get());

@@ -6,7 +6,9 @@ import com.mmhtoo.note.dto.request.RegisterReqDTO;
 import com.mmhtoo.note.dto.response.AppResponse;
 import com.mmhtoo.note.entity.Account;
 import com.mmhtoo.note.exception.custom.DuplicateEntityException;
+import com.mmhtoo.note.exception.custom.InvalidDataAccessException;
 import com.mmhtoo.note.exception.custom.NeedVerificationException;
+import com.mmhtoo.note.exception.custom.RepeatedVerificationException;
 import com.mmhtoo.note.mapper.AccountMapper;
 import com.mmhtoo.note.service.IAccountService;
 import com.mmhtoo.note.service.ITokenService;
@@ -75,14 +77,18 @@ public class AccountController extends BaseController {
         ) ;
     }
 
-    @GetMapping
+    @GetMapping( value = "${api.accounts.verify}")
     @Transactional
     public ResponseEntity<AppResponse> verifyAccount(
             @RequestParam( value = "email" ) String email ,
-            @RequestParam( value = "code" ) String code
-    ){
-        this.accountService.verifyAccount(email,code);
-        return null;
+            @RequestParam( value = "code" ) int code
+    ) throws InvalidDataAccessException, RepeatedVerificationException {
+        Account savedAccount = this.accountService.verifyAccount(email,code);
+        return ResponseUtil.dataResponse(
+                HttpStatus.OK,
+                "Successfully verified account with "+email+"!",
+                AccountMapper.accountToAccountResDto(savedAccount)
+        );
     }
 
 }

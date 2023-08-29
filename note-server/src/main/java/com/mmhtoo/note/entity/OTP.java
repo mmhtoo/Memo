@@ -33,7 +33,7 @@ public class OTP {
     private LocalDateTime updatedDate;
 
     @Column( name = "has_verified")
-    private Boolean hasVerified;
+    private boolean hasVerified;
 
     @ManyToOne
     @JoinColumn( name = "account_id" )

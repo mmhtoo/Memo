@@ -3,9 +3,11 @@ package com.mmhtoo.note.service.implementation;
 import com.mmhtoo.note.dto.request.LoginReqDTO;
 import com.mmhtoo.note.dto.request.RegisterReqDTO;
 import com.mmhtoo.note.entity.Account;
+import com.mmhtoo.note.entity.OTP;
 import com.mmhtoo.note.exception.custom.DuplicateEntityException;
 import com.mmhtoo.note.exception.custom.InvalidDataAccessException;
 import com.mmhtoo.note.exception.custom.NeedVerificationException;
+import com.mmhtoo.note.exception.custom.RepeatedVerificationException;
 import com.mmhtoo.note.mapper.AccountMapper;
 import com.mmhtoo.note.repository.AccountRepo;
 import com.mmhtoo.note.service.IAccountService;
@@ -77,24 +79,24 @@ public class AccountService implements IAccountService {
         Account savedAccount = this.getAccountByEmail(registerReqDTO.getEmail());
 
         // checking this email is already used by other verified account
-        if(savedAccount != null && savedAccount.getIsEnabled())
+        if(savedAccount != null && savedAccount.isEnabled())
             throw new DuplicateEntityException("This email is already used by other account!");
 
         // checking this email has already registered, but has not verified yet
-        if(savedAccount != null && !savedAccount.getIsEnabled())
+        if(savedAccount != null && !savedAccount.isEnabled())
             throw new NeedVerificationException("This account is already registered, you need to verify in your email for complete!");
 
         registerReqDTO.setPassword(this.passwordEncoder.encode(registerReqDTO.getPassword()));
         Account account = AccountMapper.registerReqDtoToAccount(registerReqDTO);
         account.setId(UUID.randomUUID().toString());
-        account.setIsEnabled(false);
-        account.setIsLocked(false);
+        account.setEnabled(false);
+        account.setLocked(false);
         account.setJoinedDate(LocalDateTime.now());
 
         savedAccount = this.accountRepo.save(account);
 
         this.otpService.send(
-                savedAccount.getEmail() ,
+                savedAccount ,
                 this.otpService.generateOTP()
         );
 
@@ -111,8 +113,25 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public Account verifyAccount(String email, String otp) {
-        return null;
+    public Account verifyAccount(String email, int otp) throws InvalidDataAccessException, RepeatedVerificationException {
+       Account savedAccount = this.getAccountByEmail(email);
+
+       // checking there is registered account with email or note
+       if( savedAccount == null )
+           throw new InvalidDataAccessException("Invalid email or OTP!");
+
+       // checking that account is already enabled or not
+       if( savedAccount.isEnabled() )
+           throw new RepeatedVerificationException("This account has already verified!");
+
+       if( !this.otpService.validateOTP(savedAccount.getId(),otp))
+           throw new InvalidDataAccessException("Invalid email or OTP!");
+
+       savedAccount.setUpdatedDate(LocalDateTime.now());
+       savedAccount.setEnabled(true);
+       this.accountRepo.save(savedAccount);
+
+       return savedAccount;
     }
 
 }
