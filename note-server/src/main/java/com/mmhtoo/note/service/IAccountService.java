@@ -10,7 +10,10 @@ import com.mmhtoo.note.exception.custom.RepeatedVerificationException;
 import org.springframework.security.core.Authentication;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Map;
 
 public interface IAccountService {
@@ -73,5 +76,11 @@ public interface IAccountService {
      * if otp is true for that account and that otp is valid
      */
     Account verifyAccount(String email,int otp) throws InvalidDataAccessException, RepeatedVerificationException;
+
+    /*
+     * for loggint out
+     * will save in account history
+     */
+    boolean logout(HttpServletRequest request) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidDataAccessException;
 
 }

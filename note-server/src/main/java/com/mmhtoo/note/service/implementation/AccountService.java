@@ -1,18 +1,24 @@
 package com.mmhtoo.note.service.implementation;
 
+import com.auth0.jwt.interfaces.Claim;
 import com.mmhtoo.note.dto.request.LoginReqDTO;
 import com.mmhtoo.note.dto.request.RegisterReqDTO;
 import com.mmhtoo.note.entity.Account;
 import com.mmhtoo.note.entity.OTP;
+import com.mmhtoo.note.enumeration.HistoryType;
 import com.mmhtoo.note.exception.custom.DuplicateEntityException;
 import com.mmhtoo.note.exception.custom.InvalidDataAccessException;
 import com.mmhtoo.note.exception.custom.NeedVerificationException;
 import com.mmhtoo.note.exception.custom.RepeatedVerificationException;
 import com.mmhtoo.note.mapper.AccountMapper;
 import com.mmhtoo.note.repository.AccountRepo;
+import com.mmhtoo.note.service.IAccountHistoryService;
 import com.mmhtoo.note.service.IAccountService;
 import com.mmhtoo.note.service.IOTPService;
+import com.mmhtoo.note.service.ITokenService;
 import lombok.AllArgsConstructor;
+import org.aspectj.weaver.patterns.IToken;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +27,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +45,8 @@ public class AccountService implements IAccountService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final IOTPService otpService;
+    private final ITokenService tokenService;
+    private final IAccountHistoryService accountHistoryService;
 
     @Override
     public boolean isDuplicateEmail(String email) {
@@ -132,6 +143,28 @@ public class AccountService implements IAccountService {
        this.accountRepo.save(savedAccount);
 
        return savedAccount;
+    }
+
+    @Override
+    public boolean logout(HttpServletRequest request)
+            throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidDataAccessException {
+        /*
+         * it is sure that include jwt token because filter will check before executing this end point
+         */
+        String jwtToken = request.getHeader(HttpHeaders.AUTHORIZATION)
+                .substring(7);
+
+        Map<String, Claim> payload = this.tokenService
+                .getPayloadFromToken(jwtToken);
+
+        String userId = payload.get("userId").asString();
+        Account savedAccount = this.getAccountByAccountId(userId);
+
+        return this.accountHistoryService.saveHistory(
+                HistoryType.LOGOUT ,
+                savedAccount.getUsername() + " logged out at "+ LocalDateTime.now() ,
+                savedAccount
+        ) != null;
     }
 
 }

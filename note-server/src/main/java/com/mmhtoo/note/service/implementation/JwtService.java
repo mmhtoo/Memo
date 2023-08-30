@@ -3,6 +3,7 @@ package com.mmhtoo.note.service.implementation;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mmhtoo.note.service.ITokenService;
 import com.mmhtoo.note.util.KeyUtil;
@@ -42,8 +43,10 @@ public class JwtService implements ITokenService {
     }
 
     @Override
-    public boolean isValid(String token) {
-        return false;
+    public boolean isValid(String token) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        DecodedJWT decodedJWT = this.getVerifier().verify(token);
+        String issuer = decodedJWT.getIssuer();
+        return !this.hasExpired(token) && issuer.equals(ISSUER);
     }
 
     @Override
@@ -67,6 +70,13 @@ public class JwtService implements ITokenService {
             throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         return JWT.require(getAlgorithm())
                 .build();
+    }
+
+    @Override
+    public Map<String, Claim> getPayloadFromToken(String token) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        return this.getVerifier()
+                .verify(token)
+                .getClaims();
     }
 
 }

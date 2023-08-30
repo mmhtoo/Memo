@@ -14,6 +14,7 @@ import com.mmhtoo.note.service.IAccountService;
 import com.mmhtoo.note.service.ITokenService;
 import com.mmhtoo.note.util.ResponseUtil;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +22,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping( value = "${api.accounts.root}")
@@ -106,6 +110,29 @@ public class AccountController extends BaseController {
                 AccountMapper.accountToAccountResDto(
                         this.accountService.getAccountByAccountId(accountId)
                 )
+        );
+    }
+
+    @PostMapping( value = "${api.accounts.logout}" )
+    @Transactional
+    public ResponseEntity<AppResponse> logout(
+            HttpServletRequest request
+    ) throws InvalidDataAccessException, IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        boolean success = this.accountService.logout(request);
+        if(success)
+            return ResponseUtil.dataResponse(
+                    HttpStatus.OK ,
+                    "Successfully logged out!",
+                    "Successfully logged out!"
+            );
+
+        Map<String,String> errors = new HashMap<>();
+        errors.put("error","Failed to logout!");
+
+        return ResponseUtil.errorResponse(
+            HttpStatus.BAD_REQUEST,
+                "Failed to logout!",
+                errors
         );
     }
 
