@@ -18,7 +18,7 @@ public class BindingResultCheckAspect {
     @Around(
             value = "@annotation(com.mmhtoo.note.annotation.CheckBinding) && args(..)"
     )
-    public Object BindingCheckAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    public Object bindingCheckAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object [] args = proceedingJoinPoint.getArgs();
         BindingResult bindingResult = (BindingResult) args[1];
 

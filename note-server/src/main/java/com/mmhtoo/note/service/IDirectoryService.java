@@ -3,12 +3,16 @@ package com.mmhtoo.note.service;
 import com.mmhtoo.note.dto.request.DirectoryCreateReqDTO;
 import com.mmhtoo.note.entity.Directory;
 import com.mmhtoo.note.exception.custom.DuplicateEntityException;
+import com.mmhtoo.note.exception.custom.InvalidDataAccessException;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 public interface IDirectoryService {
 
-    Directory createNewDirectory(DirectoryCreateReqDTO directoryCreateReqDTO) throws DuplicateEntityException;
+    Directory createNewDirectory(DirectoryCreateReqDTO directoryCreateReqDTO) throws DuplicateEntityException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidDataAccessException;
 
     Directory getDirectoryById(String directoryId);
 
