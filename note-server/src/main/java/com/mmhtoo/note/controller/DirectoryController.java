@@ -2,6 +2,7 @@ package com.mmhtoo.note.controller;
 
 import com.mmhtoo.note.annotation.CheckBinding;
 import com.mmhtoo.note.dto.request.DirectoryCreateReqDTO;
+import com.mmhtoo.note.dto.request.DirectoryUpdateReqDTO;
 import com.mmhtoo.note.dto.response.AppResponse;
 import com.mmhtoo.note.entity.Directory;
 import com.mmhtoo.note.exception.custom.DuplicateEntityException;
@@ -14,11 +15,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -34,6 +33,7 @@ public class DirectoryController extends BaseController {
 
     @CheckBinding
     @PostMapping
+    @Transactional
     public ResponseEntity<AppResponse> createNewDirectory(
           @Valid @RequestBody DirectoryCreateReqDTO directoryCreateReqDTO ,
           BindingResult bindingResult
@@ -48,5 +48,41 @@ public class DirectoryController extends BaseController {
         );
     }
 
+    @GetMapping( value = "${api.directories.targetDir}" )
+    public ResponseEntity<AppResponse> getDirectoryInfo(
+            @PathVariable( value = "directoryId" ) String directoryId
+    ) throws InvalidDataAccessException, IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        return ResponseUtil.dataResponse(
+                HttpStatus.OK ,
+                "Success!",
+                DirectoryMapper.directoryToDirectoryResponseDTO(
+                        this.directoryService.getDirectoryInfoById(directoryId)
+                )
+        );
+    }
+
+    @CheckBinding
+    @PutMapping( value = "${api.directories.targetDir}")
+    @Transactional
+    public ResponseEntity<AppResponse> updateDirectory(
+            @Valid @RequestBody DirectoryUpdateReqDTO directoryUpdateReqDTO ,
+            BindingResult bindingResult ,
+            @PathVariable( value = "directoryId") String directoryId
+    ) throws InvalidDataAccessException, DuplicateEntityException, IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        Directory updatedDirectory = this.directoryService.updateDirectory(
+                directoryUpdateReqDTO , directoryId
+
+        );
+        return ResponseUtil.dataResponse(
+                HttpStatus.OK,
+                "Successfully updated!",
+                DirectoryMapper.directoryToDirectoryResponseDTO(
+                        updatedDirectory
+                )
+        );
+    }
+
+
 
 }
+
