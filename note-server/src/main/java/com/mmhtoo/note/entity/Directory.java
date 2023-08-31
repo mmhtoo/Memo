@@ -1,5 +1,7 @@
 package com.mmhtoo.note.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @Table( name = "directories")
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Directory {
 
     @Id
@@ -36,5 +40,9 @@ public class Directory {
     @ManyToOne
     @JoinColumn( name = "account_id" )
     private Account account;
+
+    @ManyToOne( cascade = CascadeType.REMOVE )
+    @JoinColumn( name = "parent_dir_id" )
+    private Directory parentDir;
 
 }

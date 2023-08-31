@@ -1,10 +1,10 @@
 package com.mmhtoo.note.service.implementation;
 
 import com.auth0.jwt.interfaces.Claim;
+import com.mmhtoo.note.annotation.CreateDirectoryAfterSuccess;
 import com.mmhtoo.note.dto.request.LoginReqDTO;
 import com.mmhtoo.note.dto.request.RegisterReqDTO;
 import com.mmhtoo.note.entity.Account;
-import com.mmhtoo.note.entity.OTP;
 import com.mmhtoo.note.enumeration.HistoryType;
 import com.mmhtoo.note.exception.custom.DuplicateEntityException;
 import com.mmhtoo.note.exception.custom.InvalidDataAccessException;
@@ -12,12 +12,8 @@ import com.mmhtoo.note.exception.custom.NeedVerificationException;
 import com.mmhtoo.note.exception.custom.RepeatedVerificationException;
 import com.mmhtoo.note.mapper.AccountMapper;
 import com.mmhtoo.note.repository.AccountRepo;
-import com.mmhtoo.note.service.IAccountHistoryService;
-import com.mmhtoo.note.service.IAccountService;
-import com.mmhtoo.note.service.IOTPService;
-import com.mmhtoo.note.service.ITokenService;
+import com.mmhtoo.note.service.*;
 import lombok.AllArgsConstructor;
-import org.aspectj.weaver.patterns.IToken;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -123,7 +119,9 @@ public class AccountService implements IAccountService {
         return payload;
     }
 
+    // will create new directory after executing
     @Override
+    @CreateDirectoryAfterSuccess
     public Account verifyAccount(String email, int otp) throws InvalidDataAccessException, RepeatedVerificationException {
        Account savedAccount = this.getAccountByEmail(email);
 
@@ -141,6 +139,11 @@ public class AccountService implements IAccountService {
        savedAccount.setUpdatedDate(LocalDateTime.now());
        savedAccount.setEnabled(true);
        this.accountRepo.save(savedAccount);
+
+       /*
+        * calling directory service for creating
+        * default root directory for activated account
+        */
 
        return savedAccount;
     }
