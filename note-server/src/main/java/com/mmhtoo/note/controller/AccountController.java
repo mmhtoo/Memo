@@ -65,7 +65,6 @@ public class AccountController extends BaseController {
 
         Account account = this.accountService.authenticate(loginReqDTO);
 
-        // TODO : add Token in Response Header
         String token = this.tokenService.generate(
                 this.accountService.getTokenPayload(account)
         );

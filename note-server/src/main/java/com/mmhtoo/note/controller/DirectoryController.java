@@ -82,6 +82,16 @@ public class DirectoryController extends BaseController {
         );
     }
 
+    @GetMapping
+    public ResponseEntity<AppResponse> getAllDirectoriesOfAccount() throws InvalidDataAccessException, IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        return ResponseUtil
+                .dataResponse(
+                        HttpStatus.OK,
+                        "Success!",
+                        this.directoryService.getDirectoriesOfAccount()
+                                .stream().map(DirectoryMapper::directoryToDirectoryResponseDTO)
+                );
+    }
 
 
 }

@@ -27,4 +27,6 @@ public interface IDirectoryService {
 
     Directory updateDirectory(DirectoryUpdateReqDTO directoryUpdateReqDTO,String directoryId) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidDataAccessException, DuplicateEntityException;
 
+    List<Directory> getDirectoriesOfAccount() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidDataAccessException;
+
 }

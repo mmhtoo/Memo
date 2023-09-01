@@ -11,6 +11,7 @@ import com.mmhtoo.note.repository.DirectoryRepo;
 import com.mmhtoo.note.service.IDirectoryService;
 import com.mmhtoo.note.service.ITokenService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -150,6 +151,19 @@ public class DirectoryService implements IDirectoryService {
         savedDir.setParentDir(parentDir);
 
         return this.directoryRepo.save(savedDir);
+    }
+
+    @Override
+    public List<Directory> getDirectoriesOfAccount()
+            throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidDataAccessException {
+        Map<String,Claim> payload = this.tokenService.getPayloadFromRequest(request);
+
+        if( payload == null )
+            throw new InvalidDataAccessException("Invalid account for access!");
+
+        return this.directoryRepo.findByAccountId(
+                payload.get("userId").asString()
+        );
     }
 
 }
