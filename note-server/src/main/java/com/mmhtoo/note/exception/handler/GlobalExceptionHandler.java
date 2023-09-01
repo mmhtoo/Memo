@@ -9,6 +9,7 @@ import com.mmhtoo.note.util.ResponseUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -76,6 +77,17 @@ public class GlobalExceptionHandler {
         error.put("error",e.getMessage());
         return ResponseUtil.errorResponse(
                 HttpStatus.BAD_REQUEST ,
+                e.getMessage() ,
+                error
+        );
+    }
+
+    @ExceptionHandler({AccessDeniedException.class})
+    public ResponseEntity<AppResponse> accessDeniedHandler(Exception e){
+        Map<String,String> error = new HashMap<>();
+        error.put("error",e.getMessage());
+        return ResponseUtil.errorResponse(
+                HttpStatus.FORBIDDEN ,
                 e.getMessage() ,
                 error
         );

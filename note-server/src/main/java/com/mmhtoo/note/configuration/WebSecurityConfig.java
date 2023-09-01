@@ -1,5 +1,6 @@
 package com.mmhtoo.note.configuration;
 
+import com.mmhtoo.note.exception.handler.HttpEntryPointHandler;
 import com.mmhtoo.note.filter.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ public class WebSecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final HttpEntryPointHandler httpEntryPointHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -32,6 +34,9 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/accounts/signup","/accounts/auth","/accounts/verify","/accounts","/ratings","/send").permitAll()
                 .anyRequest().authenticated().and()
+                .exceptionHandling()
+                .authenticationEntryPoint(httpEntryPointHandler)
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authenticationProvider(daoAuthenticationProvider())

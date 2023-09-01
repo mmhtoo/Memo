@@ -38,3 +38,4 @@ jwt:
 app:
   verificationUrl: http://localhost:9000/api/accounts/verify
   redirectUrlAfterVerified: http://localhost:3000
+  clientUrl : http://localhost:3000
