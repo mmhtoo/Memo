@@ -35,10 +35,10 @@ public class Account {
     private String phone;
 
     @Column( name = "is_locked")
-    private Boolean isLocked;
+    private boolean isLocked;
 
     @Column( name = "is_enabled" , nullable = false)
-    private Boolean isEnabled;
+    private boolean isEnabled;
 
     @Column( name = "joined_date" , nullable = false)
     private LocalDateTime joinedDate;

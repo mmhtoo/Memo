@@ -20,7 +20,7 @@ public class AccountMapper {
                 .username(account.getUsername())
                 .email(account.getEmail())
                 .password(account.getPassword())
-                .isLocked(account.getIsLocked())
+                .isLocked(account.isLocked())
                 .joinedDate(account.getJoinedDate())
                 .updatedDate(account.getUpdatedDate())
                 .build();

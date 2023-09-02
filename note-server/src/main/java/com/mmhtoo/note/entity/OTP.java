@@ -1,5 +1,7 @@
 package com.mmhtoo.note.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @Table
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class OTP {
 
     @Id
@@ -17,7 +21,7 @@ public class OTP {
     private Integer id;
 
     @Column( name = "otp" , nullable = false , length = 6 )
-    private String otp;
+    private Integer otp;
 
     @Column( name = "created_date")
     private LocalDateTime createdDate;
@@ -29,7 +33,7 @@ public class OTP {
     private LocalDateTime updatedDate;
 
     @Column( name = "has_verified")
-    private Boolean hasVerified;
+    private boolean hasVerified;
 
     @ManyToOne
     @JoinColumn( name = "account_id" )

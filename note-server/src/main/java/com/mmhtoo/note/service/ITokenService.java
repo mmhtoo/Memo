@@ -2,7 +2,9 @@ package com.mmhtoo.note.service;
 
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -33,7 +35,7 @@ public interface ITokenService {
      * @return : boolean
      * description : Will return true if token is valid, otherwise false
      */
-    boolean isValid(String token);
+    boolean isValid(String token) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException;
 
     /*
      * for getting algorithm for signing token
@@ -50,5 +52,15 @@ public interface ITokenService {
      * will return verifier
      */
     JWTVerifier getVerifier() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException;
+
+    /*
+     * for getting payload from token
+     */
+    Map<String, Claim> getPayloadFromToken(String token) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException;
+
+    /*
+     * for getting payload from request
+     */
+    Map<String,Claim> getPayloadFromRequest(HttpServletRequest request) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException;
 
 }

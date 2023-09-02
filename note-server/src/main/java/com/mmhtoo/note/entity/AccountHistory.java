@@ -1,7 +1,7 @@
 package com.mmhtoo.note.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.mmhtoo.note.enumeration.HistoryType;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Table( name = "account_histories" )
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class AccountHistory {
 
     @Id
@@ -17,7 +19,8 @@ public class AccountHistory {
     private Integer id;
 
     @Column( name = "history_type")
-    private String historyType;
+    @Enumerated
+    private HistoryType historyType;
 
     @Column( name = "description")
     private String description;

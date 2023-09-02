@@ -4,12 +4,14 @@ import com.mmhtoo.note.dto.response.AppResponse;
 import com.mmhtoo.note.exception.custom.DuplicateEntityException;
 import com.mmhtoo.note.exception.custom.InvalidDataAccessException;
 import com.mmhtoo.note.exception.custom.NeedVerificationException;
+import com.mmhtoo.note.exception.custom.RepeatedVerificationException;
 import com.mmhtoo.note.util.ResponseUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -68,7 +70,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler({ UsernameNotFoundException.class , BadCredentialsException.class })
+    @ExceptionHandler({ UsernameNotFoundException.class , MissingServletRequestParameterException.class , BadCredentialsException.class , RepeatedVerificationException.class })
     public ResponseEntity<AppResponse> userNotFoundAndBadCredentialException(Exception e ){
         Map<String,String> error = new HashMap<>();
         error.put("error",e.getMessage());

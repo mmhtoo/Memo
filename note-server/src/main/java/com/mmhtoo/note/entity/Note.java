@@ -1,5 +1,7 @@
 package com.mmhtoo.note.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,10 +12,16 @@ import java.time.LocalDateTime;
 @Table( name = "notes")
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Note {
 
     @Id
+    @GeneratedValue( strategy = GenerationType.AUTO )
     private Integer id;
+
+    @Column( name = "name" )
+    private String name;
 
     @Column( name = "title")
     private String title;
