@@ -6,12 +6,19 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      pages: '/src/pages',
-      assets: '/src/assets',
-      components: '/src/components',
-      router: '/src/router',
-      services: '/src/services',
-      slices: '/src/slices',
+      '@assets': './src/assets',
+      '@components': './src/components',
+      '@pages': './src/pages',
+      '@hooks': './src/hooks',
+      '@router': './src/router',
+      '@services': './src/services',
+      '@slices': './src/slices',
+      '@store': './src/store',
+      '@constants': './src/constants',
+      '@utils': './src/utils',
     },
+  },
+  server: {
+    port: 3000,
   },
 })
