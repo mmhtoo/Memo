@@ -1,5 +1,6 @@
 import {api} from '@constants/routes.ts'
 import axios from '@libs/axios/axiosInstance.ts'
+import {AxiosResponse} from 'axios'
 
 type RegisterAccountDto = {
   username: string
@@ -28,10 +29,12 @@ export const registerAccount = async (
 export const loginAccount = async (
   dto: LoginAccountDto
 ): Promise<
-  DataResponse<Account> | ErrorResponse<LoginAccountDto | {error: string}>
+  AxiosResponse<
+    DataResponse<Account> | ErrorResponse<LoginAccountDto | {error: string}>
+  >
 > => {
   const response = await axios.post(api.login, dto)
-  return response.data
+  return response
 }
 
 export const verifyAccount = async (

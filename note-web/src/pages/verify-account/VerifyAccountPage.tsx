@@ -40,7 +40,7 @@ const VerifyAccountPage: FC = () => {
         >
           <Col xs={10} sm={9} md={8} lg={6} xxl={5}>
             <Row className="d-flex justify-content-center">
-              <Col sm={10} lg={9}>
+              <Col md={8} xl={9}>
                 <LazyLoadImage
                   style={{
                     width: '100%',
@@ -64,7 +64,7 @@ const VerifyAccountPage: FC = () => {
                 </h3>
                 <p
                   className="text-start"
-                  style={{fontSize: '16px', color: 'var(--pale-dark)'}}
+                  style={{fontSize: '14px', color: 'var(--pale-dark)'}}
                 >
                   Please go to your mail box for activate link or getting
                   verification code!
@@ -125,7 +125,7 @@ const VerifyAccountPage: FC = () => {
                     <span
                       className="my-1 py-0"
                       style={{
-                        fontSize: 16,
+                        fontSize: 12,
                       }}
                     >
                       Or

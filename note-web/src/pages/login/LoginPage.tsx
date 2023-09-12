@@ -5,10 +5,13 @@ import {FC} from 'react'
 import {Button, Col, Container, Form, Row} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import {FadeIn} from '@components/animations/index.ts'
+import useLogin from './hooks/useLogin'
 
 const LoginPage: FC = () => {
+  const {isLoading, errors, register, onSubmit, handleSubmit} = useLogin()
+
   runOnce(() => {
-    defineTitle('Memo | Sign Up')
+    defineTitle('Memo | Sign In')
   })
 
   return (
@@ -43,25 +46,40 @@ const LoginPage: FC = () => {
                 className="text-center"
                 style={{fontSize: '12px', color: 'var(--pale-dark)'}}
               >
-                Save you notes with us, sign in your account!
+                Save you notes with
+                <span
+                  className="text-italic ms-1 "
+                  style={{
+                    color: 'var(--green)',
+                  }}
+                >
+                  Memo
+                </span>
+                , sign in your account!
               </p>
             </Container>
-            <Form className="px-2 mt-3">
+            <Form onSubmit={handleSubmit(onSubmit)} className="px-2 mt-3">
               <Form.Group className="mb-2">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type={'email'}
                   placeholder={'Enter email address'}
+                  {...register('email')}
                 />
+                <span className="error">{errors.email?.message}</span>
               </Form.Group>
               <Form.Group className="mb-2">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
                   type={'password'}
                   placeholder={'Enter password'}
+                  {...register('password')}
                 />
+                <span className="error">{errors.password?.message}</span>
               </Form.Group>
-              <Button className="w-100 mt-2">Sign Up</Button>
+              <Button type="submit" disabled={isLoading} className="w-100 mt-2">
+                Sign in
+              </Button>
               <Container>
                 <p
                   className="mt-2 text-center"
@@ -72,7 +90,7 @@ const LoginPage: FC = () => {
                     to={routes.register}
                     className="ms-1 text-decoration-none"
                   >
-                    Sign in
+                    {isLoading ? 'Loading...' : 'Sign in'}
                   </Link>
                 </p>
               </Container>

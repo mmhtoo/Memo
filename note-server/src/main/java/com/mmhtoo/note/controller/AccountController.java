@@ -71,6 +71,7 @@ public class AccountController extends BaseController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(HttpHeaders.AUTHORIZATION,token);
+        httpHeaders.set(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS,"Authorization");
 
         return ResponseUtil.dataResponse(
                 HttpStatus.OK ,
