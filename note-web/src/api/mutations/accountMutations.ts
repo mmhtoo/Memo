@@ -11,6 +11,11 @@ type LoginAccountDto = {
   password: string
 }
 
+type VerifyAccountDto = {
+  code: string
+  email: string
+}
+
 export const registerAccount = async (
   dto: RegisterAccountDto
 ): Promise<
@@ -26,5 +31,14 @@ export const loginAccount = async (
   DataResponse<Account> | ErrorResponse<LoginAccountDto | {error: string}>
 > => {
   const response = await axios.post(api.login, dto)
+  return response.data
+}
+
+export const verifyAccount = async (
+  dto: VerifyAccountDto
+): Promise<DataResponse<string> & ErrorResponse<{error: string}>> => {
+  const response = await axios.get(
+    `${api.verifyAccount}?code=${dto.code}&email=${dto.email}`
+  )
   return response.data
 }

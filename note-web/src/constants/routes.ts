@@ -14,6 +14,7 @@ export const api = {
   register: '/accounts/signup',
   login: '/accounts/auth',
   account: '/accounts/{accountId}',
+  verifyAccount: '/accounts/verify',
   logout: '/accounts/logout',
   directories: '/directories',
   directory: '/{directoryId}',

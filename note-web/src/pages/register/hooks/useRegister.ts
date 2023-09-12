@@ -37,10 +37,17 @@ const schema = yup.object({
 type RegisterForm = InferType<typeof schema>
 
 const useRegister = () => {
-  const {register, handleSubmit, setError, formState, clearErrors, reset} =
-    useForm<RegisterForm>({
-      resolver: yupResolver(schema),
-    })
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState,
+    clearErrors,
+    reset,
+    getValues,
+  } = useForm<RegisterForm>({
+    resolver: yupResolver(schema),
+  })
 
   const {mutateAsync, isLoading: isRegistering} = useMutation({
     mutationKey: ['users', 'register'],
@@ -58,9 +65,9 @@ const useRegister = () => {
     })
       .then((res) => {
         toast.success(res.description)
-        console.log(formState)
+
         setTimeout(() => {
-          navigate(`${routes.accountVerify}`, {
+          navigate(`${routes.accountVerify}?email=${getValues('email')}`, {
             replace: true,
           })
         }, 50)

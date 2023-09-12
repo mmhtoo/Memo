@@ -36,11 +36,11 @@ public class DirectoryService implements IDirectoryService {
     ) throws DuplicateEntityException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidDataAccessException {
 
         Map<String, Claim> payload = this.tokenService.getPayloadFromRequest(request);
-
-        if( payload == null || payload.get("userId") == null )
+        String userId = payload == null ? directoryCreateReqDTO.getAccountId() : payload.get("userId").toString();
+        if( userId == null )
             throw new InvalidDataAccessException("Invalid account id for request!");
 
-        directoryCreateReqDTO.setAccountId(payload.get("userId").asString());
+        directoryCreateReqDTO.setAccountId(directoryCreateReqDTO.getAccountId());
 
        boolean isDuplicate = this.isDuplicateDir(
                directoryCreateReqDTO.getName() ,
