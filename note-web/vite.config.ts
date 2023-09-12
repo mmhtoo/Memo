@@ -16,6 +16,8 @@ export default defineConfig({
       '@store': './src/store',
       '@constants': './src/constants',
       '@utils': './src/utils',
+      '@libs': './src/libs',
+      '@api': './src/api',
     },
   },
   server: {
