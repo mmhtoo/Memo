@@ -1,1 +1,1 @@
-export {default as ProtectedRoute} from '@components/shared/ProtectedRoute.tsx'
+export {default as AuthRoute} from './AuthRoute.tsx'

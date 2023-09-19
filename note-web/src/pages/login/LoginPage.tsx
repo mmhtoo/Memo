@@ -78,7 +78,7 @@ const LoginPage: FC = () => {
                 <span className="error">{errors.password?.message}</span>
               </Form.Group>
               <Button type="submit" disabled={isLoading} className="w-100 mt-2">
-                Sign in
+                {isLoading ? 'Loading...' : 'Sign in'}
               </Button>
               <Container>
                 <p
@@ -90,7 +90,7 @@ const LoginPage: FC = () => {
                     to={routes.register}
                     className="ms-1 text-decoration-none"
                   >
-                    {isLoading ? 'Loading...' : 'Sign in'}
+                    Sign up
                   </Link>
                 </p>
               </Container>

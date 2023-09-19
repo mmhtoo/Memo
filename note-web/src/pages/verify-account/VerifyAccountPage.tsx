@@ -18,7 +18,7 @@ import routes from '@constants/routes.ts'
 import useVerifyAccount from './hooks/useVerifyAccount.ts'
 
 const VerifyAccountPage: FC = () => {
-  const {register, errors, handleSubmit, setValue, onSubmit} =
+  const {register, errors, handleSubmit, setValue, onSubmit, isVerifying} =
     useVerifyAccount()
   const [params, _setParams] = useSearchParams({email: ''})
 
@@ -44,7 +44,6 @@ const VerifyAccountPage: FC = () => {
                 <LazyLoadImage
                   style={{
                     width: '100%',
-                    height: '400px',
                     boxShadow: '0 0 2px var(--fade-dark)',
                     borderRadius: '3px',
                   }}
@@ -58,7 +57,7 @@ const VerifyAccountPage: FC = () => {
           </Col>
           <Col xs={10} sm={9} md={8} lg={6} xxl={5}>
             <Row>
-              <Col xs={12} className="pt-5 p-5  ">
+              <Col xs={12} className="py-5 px-md-3 px-xl-5">
                 <h3 className="text-start" style={{color: 'var(--green)'}}>
                   Verify Your Account
                 </h3>
@@ -98,7 +97,7 @@ const VerifyAccountPage: FC = () => {
                       variant="primary"
                       className="w-100"
                     >
-                      Verify
+                      {isVerifying ? 'Verifying' : 'Verify'}
                     </Button>
                     <span
                       className={'error link'}

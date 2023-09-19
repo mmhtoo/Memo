@@ -1,3 +1,4 @@
+import {AuthRoute} from '@components/shared/index.ts'
 import routes from '@constants/routes.ts'
 import {
   LoginPage,
@@ -11,7 +12,10 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={routes.app} element={<AppPage />} />
+        <Route
+          path={routes.app}
+          element={<AuthRoute element={<AppPage />} />}
+        />
         <Route path={routes.login} element={<LoginPage />} />
         <Route path={routes.register} element={<RegisterPage />} />
         <Route path={routes.accountVerify} element={<VerifyAccountPage />} />

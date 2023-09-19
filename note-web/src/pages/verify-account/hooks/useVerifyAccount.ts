@@ -1,4 +1,5 @@
 import {verifyAccount} from '@api/mutations/accountMutations.ts'
+import routes from '@constants/routes.ts'
 import {yupResolver} from '@hookform/resolvers/yup'
 import {useMutation} from '@tanstack/react-query'
 import {SubmitHandler, useForm} from 'react-hook-form'
@@ -32,7 +33,7 @@ const useVerifyAccount = () => {
     mutationFn: verifyAccount,
   })
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const onSubmit: SubmitHandler<CodeForm> = (data) => {
     clearErrors()
@@ -42,6 +43,9 @@ const useVerifyAccount = () => {
     })
       .then((res) => {
         toast.success(res.description)
+        setTimeout(() => {
+          navigate(routes.login)
+        }, 100)
       })
       .catch((e) => {
         const res = e.response?.data as ErrorResponse<

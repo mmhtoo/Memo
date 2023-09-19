@@ -1,6 +1,8 @@
 import {loginAccount} from '@api/mutations/accountMutations.ts'
 import routes from '@constants/routes.ts'
 import {yupResolver} from '@hookform/resolvers/yup'
+import {useAppDispatch} from '@hooks/useRedux.ts'
+import {saveToken} from '@slices/userSlice.ts'
 import {useMutation} from '@tanstack/react-query'
 import {SubmitHandler, useForm} from 'react-hook-form'
 import {useNavigate} from 'react-router-dom'
@@ -27,13 +29,18 @@ const useLogin = () => {
   })
 
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
 
   const onSubmit: SubmitHandler<LoginForm> = (data) => {
+    clearErrors()
     mutateAsync(data)
       .then((res) => {
         toast.success(res.data.description)
         const token = res.headers['authorization']
-        navigate(routes.app)
+        dispatch(saveToken(token))
+        setTimeout(() => {
+          navigate(`${routes.app}`)
+        }, 100)
       })
       .catch((e) => {
         const errorBody = e.response?.data as ErrorResponse<

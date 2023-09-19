@@ -34,7 +34,7 @@ spring:
         size: 5
 jwt:
   issuer: MMHTOO@DEV
-  age: 30
+  age: 1 # one month
 app:
   verificationUrl: http://localhost:9000/api/accounts/verify
   redirectUrlAfterVerified: http://localhost:3000
