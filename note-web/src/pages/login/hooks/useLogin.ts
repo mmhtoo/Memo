@@ -1,5 +1,4 @@
 import {loginAccount} from '@api/mutations/accountMutations.ts'
-import routes from '@constants/routes.ts'
 import {yupResolver} from '@hookform/resolvers/yup'
 import {useAppDispatch} from '@hooks/useRedux.ts'
 import {saveToken} from '@slices/userSlice.ts'
@@ -35,11 +34,12 @@ const useLogin = () => {
     clearErrors()
     mutateAsync(data)
       .then((res) => {
+        const response = res.data as DataResponse<Account>
         toast.success(res.data.description)
         const token = res.headers['authorization']
         dispatch(saveToken(token))
         setTimeout(() => {
-          navigate(`${routes.app}`)
+          navigate(`/${response.data.accountId}`)
         }, 100)
       })
       .catch((e) => {

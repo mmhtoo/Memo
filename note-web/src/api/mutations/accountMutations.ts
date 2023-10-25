@@ -28,12 +28,10 @@ export const registerAccount = async (
 
 export const loginAccount = async (
   dto: LoginAccountDto
-): Promise<
-  AxiosResponse<
-    DataResponse<Account> | ErrorResponse<LoginAccountDto | {error: string}>
-  >
-> => {
-  const response = await axios.post(api.login, dto)
+) => {
+  const response :  AxiosResponse<
+  DataResponse<Account> | ErrorResponse<LoginAccountDto | {error: string}>
+> = await axios.post(api.login, dto)
   return response
 }
 

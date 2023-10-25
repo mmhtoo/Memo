@@ -40,4 +40,9 @@ declare global {
     createdDate: Date | string
     updatedDate: Date | string
   }
+  interface SvgProps {
+    width?: number
+    height?: number
+    fill?: string
+  }
 }

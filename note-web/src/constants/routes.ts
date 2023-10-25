@@ -2,13 +2,14 @@
 const routes = {
   login: '/sign-in',
   register: '/sign-up',
-  app: '/',
+  app: '/:userId',
+  root : '/',
   accountVerify: '/verify-account',
 }
 
 export default routes
 
-// api routes
+// api endpoints
 export const api = {
   register: '/accounts/signup',
   login: '/accounts/auth',

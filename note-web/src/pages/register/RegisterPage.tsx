@@ -8,7 +8,7 @@ import {FadeIn} from '@components/animations/index.ts'
 import useRegister from './hooks/useRegister.ts'
 
 const RegisterPage: FC = () => {
-  const {register, isRegistering, handleSubmit, onSubmit, errors, reset} =
+  const {register, isRegistering, handleSubmit, onSubmit, errors} =
     useRegister()
 
   runOnce(() => {

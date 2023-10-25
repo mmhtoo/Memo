@@ -1,0 +1,11 @@
+#sidebar-item {
+  transition: 0.3s all;
+}
+
+#sidebar-item.active {
+  background-color: var(--cyan-blue) !important;
+}
+
+#sidebar-item:hover {
+  background-color: rgba(0, 0, 0, 0.15) !important;
+}
