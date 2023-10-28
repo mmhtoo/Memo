@@ -1,6 +1,5 @@
 import {AppLayout} from '@components/layouts/index.ts'
 import {FC} from 'react'
-import {FormControl, FormLabel, InputGroup} from 'react-bootstrap'
 import DirectoryGroup from './components/DirectoryGroup.tsx'
 import {useNavigate, useParams} from 'react-router-dom'
 import runOnce from '@utils/runOnce.ts'
@@ -24,8 +23,11 @@ const AppPage: FC = () => {
     updateDirectories((prev) => [newDir, ...prev])
   }
 
+  console.log(isLoadingDirs)
+
   runOnce(() => {
     // for preventing url overwriting
+    if (!savedUserId) return
     if (userId != savedUserId) {
       navigate(`/${savedUserId}`, {
         replace: true,
@@ -58,7 +60,7 @@ const AppPage: FC = () => {
           onPress={() => {
             console.log('hello')
           }}
-          skeletonCount={30}
+          skeletonCount={50}
         />
       </div>
     </AppLayout>

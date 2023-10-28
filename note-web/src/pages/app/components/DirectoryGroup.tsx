@@ -49,7 +49,7 @@ const DirectoryGroup: FC<Props> = (props) => {
         return (
           <Directory
             {...directory}
-            showSkeleton={isLoading}
+            editable={false}
             onPress={() => console.log('helo wors')}
             key={directory.directoryId}
           />
@@ -77,21 +77,13 @@ export default DirectoryGroup
 
 type DirectoryProps = Partial<Directory> & {
   onPress?: (directory: Directory) => void
-  showSkeleton?: boolean
   editable?: boolean
   isNewAdding?: boolean
   onEndEditing?: (value: string) => void
 }
 
 const Directory = forwardRef<HTMLInputElement, DirectoryProps>((props) => {
-  const {
-    name,
-    directoryId,
-    editable,
-    isNewAdding = false,
-    showSkeleton,
-    onEndEditing,
-  } = props
+  const {name, directoryId, editable, isNewAdding = false, onEndEditing} = props
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   const onInput: KeyboardEventHandler<HTMLInputElement> = (e) => {
@@ -113,16 +105,12 @@ const Directory = forwardRef<HTMLInputElement, DirectoryProps>((props) => {
   return (
     <div
       id="folder-btn"
-      className={
-        'cursor-pointer d-flex flex-column align-items-center ' + editable
-          ? 'gap-0'
-          : 'gap-2'
-      }
+      className={'cursor-pointer d-flex flex-column align-items-center gap-1'}
     >
       {(directoryId || editable) && (
         <FolderIcon width={80} height={80} fill={'#17b978'} />
       )}
-      {!editable && showSkeleton && (
+      {!editable && !directoryId && (
         <Skeleton style={{width: '80px', height: '70px'}} />
       )}
       {name && (
@@ -150,7 +138,7 @@ const Directory = forwardRef<HTMLInputElement, DirectoryProps>((props) => {
           disabled={isNewAdding}
         />
       )}
-      {!editable && showSkeleton && <Skeleton width={'80px'} />}
+      {!editable && !name && <Skeleton width={'80px'} />}
     </div>
   )
 })

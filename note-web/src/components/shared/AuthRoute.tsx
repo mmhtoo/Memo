@@ -33,7 +33,7 @@ const AuthRoute: FC<Props> = ({element}) => {
   runOnce(() => {
     if (token == null) {
       toast.error('Please login to continue!')
-      return <NavigateToLogin />
+      return NavigateToLogin()
     }
 
     const decodedToken = jwtDecode<AuthData>(token!)
@@ -46,7 +46,7 @@ const AuthRoute: FC<Props> = ({element}) => {
 
     if (isExpire(decodedToken.exp)) {
       toast.error('Please login to continue!')
-      return <NavigateToLogin />
+      return NavigateToLogin()
     }
   })
 
