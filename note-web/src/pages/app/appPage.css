@@ -1,0 +1,40 @@
+#new-folder-btn,
+#folder-btn {
+  width: 90px !important;
+  position: relative;
+  overflow: visible;
+}
+
+#new-folder-btn label,
+#folder-btn label {
+  font-size: 14px;
+  color: var(--carbon);
+}
+
+#folder-btn .detail,
+#add-folder-btn .detail {
+  position: absolute;
+  right: -40px;
+  top: 30px;
+  background: red;
+  z-index: 10;
+  transition: 0.5s all;
+}
+
+#folder-btn:hover .detail {
+  transition: 1s all;
+  display: block !important;
+}
+
+#new-folder-btn:hover label,
+#folder-btn:hover label {
+  transition: 0.5s all;
+  opacity: 0.5;
+  text-decoration: underline;
+}
+
+#new-folder-btn:hover svg,
+#folder-btn:hover svg {
+  transition: 0.5s all;
+  opacity: 0.5;
+}

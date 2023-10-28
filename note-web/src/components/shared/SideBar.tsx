@@ -1,11 +1,13 @@
 import AddIcon from '@assets/icons/AddIcon.tsx'
-import {FC, ReactElement, useState} from 'react'
+import {FC, ReactElement, useEffect, useState} from 'react'
 import './sideBar.css'
 import HomeIcon from '@assets/icons/HomeIcon.tsx'
 import SharedIcon from '@assets/icons/SharedIcon.tsx'
 import BookmarkIcon from '@assets/icons/BookmarkIcon.tsx'
 import ArchiveIcon from '@assets/icons/ArchiveIcon.tsx'
 import ShortcutIcon from '@assets/icons/ShortcutIcon.tsx'
+import {useAppSelector} from '@hooks/useRedux.ts'
+import {selectRootDir} from '@slices/directorySlice.ts'
 
 type NewNoteButtonProps = {
   onPress?: () => void
@@ -45,12 +47,7 @@ type SideBarItemProps = {
   icon: ReactElement
 }
 
-const SideBarItem: FC<SideBarItemProps> = ({
-  onPress,
-  isActive,
-  label,
-  icon,
-}) => {
+const SideBarItem: FC<SideBarItemProps> = ({isActive, label, icon}) => {
   return (
     <div
       id="sidebar-item"
@@ -108,7 +105,19 @@ const SIDE_ITEMS: SideBarType[] = [
 ]
 
 const SideBar: FC = () => {
+  const [sideItems, setSideItems] = useState(SIDE_ITEMS)
   const [activeIndex, _setActiveIndex] = useState(0)
+  const rootDir = useAppSelector(selectRootDir)
+
+  useEffect(() => {
+    if (!rootDir?.id || !rootDir.name) return
+    setSideItems((prevItems) => {
+      const temp = [...prevItems]
+      temp[0] = {...prevItems[0], label: `${rootDir.name || 'Home'} `}
+      return temp
+    })
+  }, [rootDir])
+
   return (
     <div
       className="px-2 bg-sky-blue h-100 position-fixed"
@@ -121,7 +130,7 @@ const SideBar: FC = () => {
     >
       <NewNoteButton />
       <div className="mt-4">
-        {SIDE_ITEMS.map((item, index) => (
+        {sideItems.map((item, index) => (
           <SideBarItem
             label={item.label}
             key={item.id.toString()}

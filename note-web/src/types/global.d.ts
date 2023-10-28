@@ -29,6 +29,7 @@ declare global {
     description: string
     numberOfNotes: number
     parentDirId: string
+    parentDirName: string
     createdDate: Date | string
     updatedDate: Date | string
   }

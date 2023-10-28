@@ -6,15 +6,12 @@ const FadeIn: FC<PropsWithChildren> = ({children}) => {
     <AnimatePresence>
       <motion.div
         initial={{
-          scale: 0,
           opacity: 0,
         }}
         animate={{
-          scale: 1,
           opacity: 1,
         }}
         exit={{
-          scale: 0,
           opacity: 0,
         }}
       >

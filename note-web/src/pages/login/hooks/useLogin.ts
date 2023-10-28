@@ -1,8 +1,10 @@
 import {loginAccount} from '@api/mutations/accountMutations.ts'
+import {AuthData} from '@components/shared/AuthRoute.ts'
 import {yupResolver} from '@hookform/resolvers/yup'
 import {useAppDispatch} from '@hooks/useRedux.ts'
-import {saveToken} from '@slices/userSlice.ts'
+import {setToken, setUserIdAndName} from '@slices/userSlice.ts'
 import {useMutation} from '@tanstack/react-query'
+import jwtDecode from 'jwt-decode'
 import {SubmitHandler, useForm} from 'react-hook-form'
 import {useNavigate} from 'react-router-dom'
 import {toast} from 'react-toastify'
@@ -36,8 +38,22 @@ const useLogin = () => {
       .then((res) => {
         const response = res.data as DataResponse<Account>
         toast.success(res.data.description)
+
         const token = res.headers['authorization']
-        dispatch(saveToken(token))
+        if (!token) {
+          toast.error('Failed to process!')
+          return
+        }
+        dispatch(setToken({token}))
+
+        const decodedToken = jwtDecode<AuthData>(token)
+        dispatch(
+          setUserIdAndName({
+            username: decodedToken.username,
+            userId: decodedToken.userId,
+          })
+        )
+
         setTimeout(() => {
           navigate(`/${response.data.accountId}`)
         }, 100)

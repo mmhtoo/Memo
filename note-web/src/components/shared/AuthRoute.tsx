@@ -1,6 +1,7 @@
 import routes from '@constants/routes.ts'
-import {useAppSelector} from '@hooks/useRedux.ts'
-import {selectedToken} from '@slices/userSlice.ts'
+import {useAppDispatch, useAppSelector} from '@hooks/useRedux.ts'
+import {selectToken, setUserIdAndName} from '@slices/userSlice.ts'
+import runOnce from '@utils/runOnce.ts'
 import jwtDecode from 'jwt-decode'
 import {FC, Fragment, ReactNode} from 'react'
 import {Navigate} from 'react-router-dom'
@@ -10,7 +11,7 @@ type Props = {
   element: ReactNode
 }
 
-type AuthData = {
+export type AuthData = {
   username: string
   userId: string
   email: string
@@ -19,7 +20,8 @@ type AuthData = {
 }
 
 const AuthRoute: FC<Props> = ({element}) => {
-  const token = useAppSelector(selectedToken)
+  const token = useAppSelector(selectToken)
+  const dispatch = useAppDispatch()
 
   const isExpire = (exp: number) =>
     Math.round(new Date().getTime() / 1000) > exp
@@ -28,17 +30,25 @@ const AuthRoute: FC<Props> = ({element}) => {
     return <Navigate to={routes.login} replace={true} />
   }
 
-  if (token == null) {
-    toast.error('Please login to continue!')
-    return NavigateToLogin()
-  }
+  runOnce(() => {
+    if (token == null) {
+      toast.error('Please login to continue!')
+      return <NavigateToLogin />
+    }
 
-  const decodedToken = jwtDecode<AuthData>(token!)
+    const decodedToken = jwtDecode<AuthData>(token!)
+    dispatch(
+      setUserIdAndName({
+        userId: decodedToken.userId,
+        username: decodedToken.username,
+      })
+    )
 
-  if (isExpire(decodedToken.exp)) {
-    toast.error('Please login to continue!')
-    return NavigateToLogin()
-  }
+    if (isExpire(decodedToken.exp)) {
+      toast.error('Please login to continue!')
+      return <NavigateToLogin />
+    }
+  })
 
   return <Fragment>{element}</Fragment>
 }
