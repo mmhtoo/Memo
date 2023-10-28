@@ -1,12 +1,12 @@
 import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react'
+import mkcert from 'vite-plugin-mkcert'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), mkcert()],
   resolve: {
     alias: {
-<<<<<<< HEAD
       '@assets': './src/assets',
       '@components': './src/components',
       '@pages': './src/pages',
@@ -16,14 +16,13 @@ export default defineConfig({
       '@slices': './src/slices',
       '@store': './src/store',
       '@constants': './src/constants',
-=======
-      pages: '/src/pages',
-      assets: '/src/assets',
-      components: '/src/components',
-      router: '/src/router',
-      services: '/src/services',
-      slices: '/src/slices',
->>>>>>> 7f3a794790435cd1d1907fe0a0c3a66bad8abd8a
+      '@utils': './src/utils',
+      '@libs': './src/libs',
+      '@api': './src/api',
     },
+  },
+  server: {
+    port: 3000,
+    https: true,
   },
 })

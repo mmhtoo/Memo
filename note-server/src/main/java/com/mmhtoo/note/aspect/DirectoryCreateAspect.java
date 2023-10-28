@@ -34,6 +34,7 @@ public class DirectoryCreateAspect {
         DirectoryCreateReqDTO directoryCreateReqDTO = new DirectoryCreateReqDTO();
         directoryCreateReqDTO.setName(savedAccount.getUsername()+"'s Home");
         directoryCreateReqDTO.setParentDirId(null);
+        directoryCreateReqDTO.setAccountId(savedAccount.getId());
         this.directoryService.createNewDirectory(
                 directoryCreateReqDTO
         );

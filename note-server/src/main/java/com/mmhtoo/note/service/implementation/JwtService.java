@@ -24,7 +24,7 @@ import java.util.Map;
 public class JwtService implements ITokenService {
 
     private @Value("${jwt.issuer}") String ISSUER;
-    // in days
+    // in month
     private @Value("${jwt.age}") int TOKEN_AGE;
 
     @Override
@@ -64,7 +64,7 @@ public class JwtService implements ITokenService {
     @Override
     public Date getExpiredDate() {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH,TOKEN_AGE);
+        calendar.add(Calendar.MONTH,TOKEN_AGE);
         return calendar.getTime();
     }
 

@@ -35,7 +35,7 @@ public class OTPService implements IOTPService {
 
     @Override
     public void send(Account sendTo, int otp) throws IOException, MessagingException {
-        OTP savedOTP = this.saveOTP(this.generateOTP(),sendTo);
+        OTP savedOTP = this.saveOTP(otp,sendTo);
 
         ClassLoader loader = getClass().getClassLoader();
         File file = new File(Objects.requireNonNull(loader.getResource("mail-template.txt")).getFile());
