@@ -1,4 +1,10 @@
-import {FolderIcon} from '@assets/icons/index.ts'
+import {
+  ArchiveIcon,
+  DeleteIcon,
+  FolderIcon,
+  ShareIcon,
+  TinyBookmarkIcon,
+} from '@assets/icons/index.ts'
 import {FC, KeyboardEventHandler, forwardRef, useEffect, useRef} from 'react'
 import '../appPage.css'
 import Skeleton from 'react-loading-skeleton'
@@ -87,6 +93,26 @@ export const Directory = forwardRef<HTMLInputElement, DirectoryProps>(
       onEndEditing && onEndEditing(inputRef.current?.value!)
     }
 
+    const onClickDelete = (e: Event | any) => {
+      e.stopPropagation()
+      console.log('delete')
+    }
+
+    const onClickShare = (e: Event | any) => {
+      e.stopPropagation()
+      console.log('share')
+    }
+
+    const onClickArchive = (e: Event | any) => {
+      e.stopPropagation()
+      console.log('archive')
+    }
+
+    const onClickBookmark = (e: Event | any) => {
+      e.stopPropagation()
+      console.log('bookmark')
+    }
+
     useEffect(() => {
       setTimeout(() => {
         if (editable && inputRef.current) inputRef.current.focus()
@@ -155,6 +181,37 @@ export const Directory = forwardRef<HTMLInputElement, DirectoryProps>(
           </div>
         )}
         {!editable && showSkeleton && <Skeleton width={'80px'} />}
+        <div
+          id="actions-group"
+          style={{
+            position: 'absolute',
+            top: '24%',
+            left: '16%',
+            visibility: 'hidden',
+          }}
+        >
+          <div
+            style={{
+              width: '50px',
+            }}
+            className=" d-flex justify-content-around align-items-center"
+          >
+            <div onClick={onClickDelete}>
+              <DeleteIcon width={16} height={16} />
+            </div>
+            <div onClick={onClickBookmark}>
+              <TinyBookmarkIcon width={16} height={16} />
+            </div>
+          </div>
+          <div className="d-flex justify-content-around align-items-center">
+            <div onClick={onClickArchive}>
+              <ArchiveIcon width={16} height={16} />
+            </div>
+            <div onClick={onClickShare}>
+              <ShareIcon width={24} height={24} />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

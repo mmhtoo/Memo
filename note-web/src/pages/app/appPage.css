@@ -26,6 +26,10 @@
   display: block !important;
 }
 
+#folder-btn:hover #actions-group {
+  visibility: visible !important;
+}
+
 #new-folder-btn:hover label,
 #folder-btn:hover label {
   transition: 0.5s all;
