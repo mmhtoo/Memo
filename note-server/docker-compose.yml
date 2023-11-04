@@ -1,0 +1,27 @@
+version: "1.0"
+services:
+  api:
+    build: .
+    ports:
+      - 9000:9000
+    networks:
+      - memo-net
+    environment:
+      spring.datasource.url: jdbc:mysql://mysqldb:3307/memo
+    depends_on:
+      - db
+  db:
+    container_name: mysqldb
+    image : "mysql:8.0"
+    restart: always
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root@123
+      MYSQL_DATABASE: memo
+    networks:
+      - memo-net
+    expose:
+      - 3306
+networks:
+  memo-net:

@@ -65,6 +65,7 @@ const AppPage: FC = () => {
 
   runOnce(() => {
     // for preventing url overwriting
+    if (!savedUserId) return
     if (userId != savedUserId) {
       navigate(`/${savedUserId}`, {
         replace: true,

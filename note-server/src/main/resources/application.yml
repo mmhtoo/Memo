@@ -1,12 +1,12 @@
-=server:
+server:
   port: 9000
   servlet:
     context-path: /api
 spring:
   datasource:
-    username: ${DB_USER}
-    url: jdbc:mysql://localhost:${DB_PORT}/${DB_NAME}
-    password: ${DB_PASSWORD}
+    username: root
+    url: jdbc:mysql://localhost:3307/memo
+    password: root@123
     driver-class: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
@@ -18,8 +18,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${SMTP_USER}
-    password: ${SMTP_PASSWORD}
+    username: myominhtoo2003@gmail.com
+    password: vmdqljrqbilexqpz
     properties:
       mail:
         smtp:
