@@ -4,7 +4,7 @@ import mkcert from 'vite-plugin-mkcert'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), mkcert()],
+  plugins: [react()],
   resolve: {
     alias: {
       '@assets': './src/assets',
@@ -23,6 +23,5 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    https: true,
   },
 })

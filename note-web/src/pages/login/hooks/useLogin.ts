@@ -55,7 +55,9 @@ const useLogin = () => {
         )
 
         setTimeout(() => {
-          navigate(`/${response.data.accountId}`)
+          navigate(`/${response.data.accountId}`,{
+            replace : true,
+          })
         }, 100)
       })
       .catch((e) => {

@@ -1,5 +1,5 @@
 import {FC} from 'react'
-import logo from '@assets/images/MemoLogo.png'
+import logo from '../../assets/imgs/MemoLogo.png'
 
 const LogoIcon: FC<{style?: {}}> = ({style = {}}) => {
   return (

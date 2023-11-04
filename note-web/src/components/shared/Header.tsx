@@ -1,6 +1,6 @@
 import {HEIGHT} from '@constants/sharedDatas.ts'
 import {FC} from 'react'
-import LogoIcon from './LogoIcon'
+import LogoIcon from './LogoIcon.tsx'
 import {useAppSelector} from '@hooks/useRedux.ts'
 import {selectUserIdAndName} from '@slices/userSlice.ts'
 import {LogoutIcon, UserIcon} from '@assets/icons/index.ts'

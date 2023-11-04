@@ -11,11 +11,11 @@ import {
   FormLabel,
   Row,
 } from 'react-bootstrap'
-import verifyAccountImg from '@assets/images/verifyAccount.jpg'
 import {LazyLoadImage} from 'react-lazy-load-image-component'
 import {Link, useSearchParams} from 'react-router-dom'
 import routes from '@constants/routes.ts'
 import useVerifyAccount from './hooks/useVerifyAccount.ts'
+import verifyImage from '../../assets/imgs/verifyAccount.jpg'
 
 const VerifyAccountPage: FC = () => {
   const {register, errors, handleSubmit, setValue, onSubmit, isVerifying} =
@@ -47,7 +47,7 @@ const VerifyAccountPage: FC = () => {
                     boxShadow: '0 0 2px var(--fade-dark)',
                     borderRadius: '3px',
                   }}
-                  src={verifyAccountImg}
+                  src={verifyImage}
                   effect={'blur'}
                   alt={'...'}
                   className="mx-auto"

@@ -1,8 +1,11 @@
 import {useEffect} from 'react'
 
-const runOnce = (callback: () => void) => {
+const runOnce = (callback: () => void | (() => void)) => {
   useEffect(() => {
-    callback()
+    const cleanup = callback()
+    return () => {
+      typeof cleanup === 'function' && cleanup()
+    }
   }, [])
 }
 
